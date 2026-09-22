@@ -1,16 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #1e293b;
+  --background: #faf9f6;
+  --foreground: #1c1917;
 }
 
 body {
-  background: #f1f5f9;
-  color: #1e293b;
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
   user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Fluid Motion Easing (Awwwards-Tier) */
+.ease-fluid {
+  transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 @keyframes tailSlow {
@@ -45,10 +51,19 @@ body {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
   }
 }
 
 .animate-bob {
-  animation: bob 3s ease-in-out infinite;
+  animation: bob 3.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Glass & Doppelrand highlights */
+.inner-highlight {
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.soft-ambient-shadow {
+  box-shadow: 0 20px 40px -15px rgba(28, 25, 23, 0.05), 0 0 1px 1px rgba(28, 25, 23, 0.03);
 }
