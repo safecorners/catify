@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐱 고양이 키우기 앱 (Cat Raising App)
 
-## Getting Started
+기획 스케치 와이어프레임을 충실히 구현한 **기하학적 다이아몬드 고양이 인터랙티브 키우기 웹 애플리케이션**입니다.
+Next.js (App Router, React 19, Tailwind CSS) 및 **Supabase (Auth & Database)** 를 기반으로 제작되었습니다.
 
-First, run the development server:
+---
+
+## 📸 주요 화면 및 기능
+
+1. **메인 화면 (Home)**
+   - 스케치의 다이아몬드/마름모형 기하학적 고양이 캐릭터 렌더링
+   - 고양이 터치/클릭 시 골골송 사운드 및 하트 파티클 인터랙션
+   - 3대 상태 게이지: **🍗 포만감**, **💖 행복도**, **⭐ 친밀도** 및 레벨
+   - 고양이 이름 즉시 수정 및 저장
+   - Web Audio API 기반 오디오 및 원클릭 음소거 토글
+   - 하단 메뉴: `먹이주기`, `놀아주기`, `꾸미기`
+
+2. **먹이주기 화면 (Feed)**
+   - 원클릭 즉시 급여: **사료/캔**, **캣닢**, **참치 츄르**, **신선한 물**
+   - 밥그릇에 음식이 채워지고 고양이가 다가가 냠냠 먹는 애니메이션
+   - 캣닢 급여 시 흥분/우다다 파티클과 특수 리액션
+
+3. **놀아주기 화면 (Play - "흔들 수 있어야함")**
+   - 낚싯대 줄 물리(Spring / Pendulum Physics) 시뮬레이션 적용
+   - 마우스/터치 드래그로 장난감을 흔들면 줄과 펜던트가 관성에 따라 휘어지고 출렁임
+   - 빠르게 흔들 때 바람 가르는 소리(Whoosh) 및 덮치기(Pounce) 성공 연출
+   - 도구 선택 4종: 깃털 낚싯대, 레이저 포인터, 방울 딸랑 쥐, 털실 뭉치
+
+4. **꾸미기 화면 (Customize)**
+   - 실시간 외형 반영 및 자동 저장
+   - **색상**: 치즈, 올블랙, 코랄레드, 순백색, 실버그레이, 버터크림
+   - **줄무늬**: 가로 줄무늬(태비), 얼룩/삼색, 턱시도, 단색
+   - **장식/악세사리**: 스케치의 귀 리본/꽃, 황금 방울 목걸이/나비넥타이, 파티모자, 선글라스
+
+---
+
+## 🛠️ 실행 방법
 
 ```bash
+# 1. 의존성 설치 (기완료)
+npm install
+
+# 2. 로컬 개발 서버 실행
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+브라우저에서 `http://localhost:3000` 접속 시 즉시 플레이할 수 있습니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ☁️ Supabase 클라우드 연동 가이드
 
-## Learn More
+앱은 기본적으로 **로컬 스토리지(LocalStorage)** 에 데이터를 자동 보존하므로 Supabase 설정 없이도 즉시 즐길 수 있습니다. 계정별 클라우드 동기화를 활성화하려면 아래 2단계를 진행하세요:
 
-To learn more about Next.js, take a look at the following resources:
+### 1) 환경 변수 설정
+프로젝트 루트 디렉토리에 `.env.local` 파일을 생성하고 Supabase 프로젝트 키를 입력합니다.
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2) 데이터베이스 테이블 생성
+[Supabase 대시보드](https://supabase.com)의 **SQL Editor**에 접속하여 [`supabase/schema.sql`](supabase/schema.sql) 파일의 내용을 붙여넣고 실행합니다.
+- `cats` 테이블 자동 생성
+- 유저별 본인 데이터만 접근 가능한 RLS(Row Level Security) 정책 적용
+- `updated_at` 타임스탬프 자동 갱신 트리거 생성
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+완료 후 앱 우측 상단의 `[로그인]` 버튼을 눌러 회원가입/로그인하면 고양이 데이터가 실시간으로 Supabase 클라우드에 영구 보존됩니다!
